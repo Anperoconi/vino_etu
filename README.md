@@ -1,3 +1,6 @@
+# URL qui permet d'éxecuter le script qui récupère les données de bouteilles de vin dans la base de données
+Local: http://localhost/Projet%20web%202/Jonathan/vino_etu/updateSAQ.php
+
 # vino
 Projet en cours de développement par les étudiants des groupes de Projet Web 2.
 
