@@ -8,7 +8,7 @@
  *
  */
 
-//const BaseURL = "https://jmartel.webdev.cmaisonneuve.qc.ca/n61/vino/";
+// const BaseURL = "https://jmartel.webdev.cmaisonneuve.qc.ca/n61/vino/";
 const BaseURL = document.baseURI;
 console.log(BaseURL);
 window.addEventListener('load', function() {
@@ -18,7 +18,6 @@ window.addEventListener('load', function() {
         element.addEventListener("click", function(evt){
             let id = evt.target.parentElement.dataset.id;
             let requete = new Request(BaseURL+"index.php?requete=boireBouteilleCellier", {method: 'POST', body: '{"id": '+id+'}'});
-
             fetch(requete)
             .then(response => {
                 if (response.status === 200) {
@@ -69,7 +68,8 @@ window.addEventListener('load', function() {
         let nom = inputNomBouteille.value;
         liste.innerHTML = "";
         if(nom){
-          let requete = new Request(BaseURL+"index.php?requete=autocompleteBouteille", {method: 'POST', body: '{"nom": "'+nom+'"}'});
+          let requete = new Request("index.php?requete=autocompleteBouteille", {method: 'POST', body: '{"nom": "'+nom+'"}'});
+          console.log(requete);
           fetch(requete)
               .then(response => {
                   if (response.status === 200) {
