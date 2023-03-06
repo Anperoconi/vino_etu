@@ -15,7 +15,6 @@ class Bouteille extends Modele {
     
 	public function getListeBouteille()
 	{
-		
 		$rows = Array();
 		$res = $this->_db->query('Select * from '. self::TABLE);
 		if($res->num_rows)
@@ -90,7 +89,6 @@ class Bouteille extends Modele {
        
 	public function autocomplete($nom, $nb_resultat=10)
 	{
-		
 		$rows = Array();
 		$nom = $this->_db->real_escape_string($nom);
 		$nom = preg_replace("/\*/","%" , $nom);

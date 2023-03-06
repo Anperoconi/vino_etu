@@ -6,7 +6,7 @@ foreach ($data as $cle => $bouteille) {
     <div class="bouteille" data-quantite="">
         <div class="img">
             
-            <img src="https:<?php echo $bouteille['image'] ?>">
+            <img src="<?php echo $bouteille['image'] ?>">
         </div>
         <div class="description">
             <p class="nom">Nom : <?php echo $bouteille['nom'] ?></p>
