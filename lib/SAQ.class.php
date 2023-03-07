@@ -191,6 +191,8 @@ class SAQ extends Modele
 				$prixF = $prixF[0] . "." . $prixF[1];
 				$prixF = floatval($prixF);
 
+				// Source: https://www.php.net/manual/en/mysqli-stmt.bind-param.php
+				//Damn you sissssdssssssssss
 				$this->stmt->bind_param("sissssdsss", $bte->nom, $type, $bte->img, $bte->desc->code_SAQ, $bte->desc->pays, $bte->desc->texte, $prixF, $bte->url, $bte->img, $bte->desc->format);
 				$retour->succes = $this->stmt->execute();
 				$retour->raison = self::INSERE;
