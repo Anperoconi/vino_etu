@@ -50,7 +50,7 @@ class Bouteille extends Modele {
 						b.pays, 
 						b.description,
 						t.type 
-						from vino__cellier c 
+						from bouteilles c 
 						INNER JOIN vino__bouteille b ON c.id_bouteille = b.id
 						INNER JOIN vino__type t ON t.id = b.type
 						'; 
@@ -132,7 +132,7 @@ class Bouteille extends Modele {
 		//TODO : Valider les données.
 		//var_dump($data);	
 		
-		$requete = "INSERT INTO vino__cellier(id_bouteille,date_achat,garde_jusqua,notes,prix,quantite,millesime) VALUES (".
+		$requete = "INSERT INTO bouteilles(id_bouteille,date_achat,garde_jusqua,notes,prix,quantite,millesime) VALUES (".
 		"'".$data->id_bouteille."',".
 		"'".$data->date_achat."',".
 		"'".$data->garde_jusqua."',".
@@ -160,7 +160,7 @@ class Bouteille extends Modele {
 		//TODO : Valider les données.
 			
 			
-		$requete = "UPDATE vino__cellier SET quantite = GREATEST(quantite + ". $nombre. ", 0) WHERE id = ". $id;
+		$requete = "UPDATE bouteilles SET quantite = GREATEST(quantite + ". $nombre. ", 0) WHERE id = ". $id;
 		//echo $requete;
         $res = $this->_db->query($requete);
         
