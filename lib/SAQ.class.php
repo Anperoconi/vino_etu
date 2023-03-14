@@ -120,8 +120,10 @@ class SAQ extends Modele
 
 		$imgElements = $noeud->getElementsByTagName('img');
 		foreach ($imgElements as $imgElement) {
-    	if ($imgElement->hasAttribute('class') && $imgElement->getAttribute('class') === 'product-image-photo') {
-        $info->img = $imgElement->getAttribute('src');}}
+			if ($imgElement->hasAttribute('class') && $imgElement->getAttribute('class') === 'product-image-photo') {
+				$info->img = $imgElement->getAttribute('src');
+			}
+		}
 
 		$a_titre = $noeud->getElementsByTagName("a")->item(0);
 		$info->url = $a_titre->getAttribute('href');
@@ -193,10 +195,19 @@ class SAQ extends Modele
 			if ($rows->num_rows < 1) {
 
 				//format le prix en 
+				// $prixF = str_replace("$", "", $bte->prix);
+				// $prixF = explode(",", $prixF);
+				// $prixF = $prixF[0] . "." . $prixF[1];
+				// $prixF = floatval($prixF);
+
 				$prixF = str_replace("$", "", $bte->prix);
 				$prixF = explode(",", $prixF);
 				$prixF = $prixF[0] . "." . $prixF[1];
 				$prixF = floatval($prixF);
+				$prixF = number_format($prixF, 2, '.', ''); // format the float value with 2 decimal places
+				$prixF = (float)$prixF; // convert the formatted string back to float
+
+
 
 				// Source: https://www.php.net/manual/en/mysqli-stmt.bind-param.php
 				//Damn you sissssdssssssssss
