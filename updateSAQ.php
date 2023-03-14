@@ -12,12 +12,16 @@
 	$nombreProduit = 96; //48 ou 96	
 	
 	$saq = new SAQ();
-	for($i=0; $i<4;$i++)	//permet d'importer séquentiellement plusieurs pages.
-	{
-		echo "<h2>page ". ($page+$i)."</h2>";
-		$nombre = $saq->getProduits($nombreProduit,$page+$i);
+
+	while(true) {
+		echo "<h2>page ". $page ."</h2>";
+		$nombre = $saq->getProduits($nombreProduit, $page);
+		echo $nombre;
+		if($nombre == 0) {
+			break; // plus de page à crawler, on sort du loop.
+		}
 		echo "importation : ". $nombre. "<br>";
-	
+		$page++;
 	}
 	
 	

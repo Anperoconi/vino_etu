@@ -26,7 +26,7 @@ class SAQ extends Modele
 	{
 		parent::__construct();
 		if (!($this->stmt = $this->_db->prepare("INSERT INTO vino__bouteille(nom, type, image, code_saq, pays, description, prix_saq, url_saq, url_img, format) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))) {
-			echo "Echec de la préparation : (" . $mysqli->errno . ") " . $mysqli->error;
+			echo "Echec de la préparation : (" . $this->_db->errno . ") " . $this->_db->error;
 		}
 	}
 
@@ -35,10 +35,11 @@ class SAQ extends Modele
 	 * @param int $nombre
 	 * @param int $debut
 	 */
-	public function getProduits($nombre = 24, $page = 1)
+	public function getProduits($nombre = 96, $page = 1)
 	{
+		ini_set('max_execution_time', 0);
 		$s = curl_init();
-		$url = "https://www.saq.com/fr/produits/vin/vin-rouge?p=" . $page . "&product_list_limit=" . $nombre . "&product_list_order=name_asc";
+		$url = "https://www.saq.com/fr/produits/vin?p=" . $page . "&product_list_limit=" . $nombre . "&product_list_order=name_asc";
 		//curl_setopt($s, CURLOPT_URL, "http://www.saq.com/webapp/wcs/stores/servlet/SearchDisplay?searchType=&orderBy=&categoryIdentifier=06&showOnly=product&langId=-2&beginIndex=".$debut."&tri=&metaData=YWRpX2YxOjA8TVRAU1A%2BYWRpX2Y5OjE%3D&pageSize=". $nombre ."&catalogId=50000&searchTerm=*&sensTri=&pageView=&facet=&categoryId=39919&storeId=20002");
 		//curl_setopt($s, CURLOPT_URL, "https://www.saq.com/webapp/wcs/stores/servlet/SearchDisplay?categoryIdentifier=06&showOnly=product&langId=-2&beginIndex=" . $debut . "&pageSize=" . $nombre . "&catalogId=50000&searchTerm=*&categoryId=39919&storeId=20002");
 		//curl_setopt($s, CURLOPT_URL, $url);
@@ -115,8 +116,13 @@ class SAQ extends Modele
 	{
 
 		$info = new stdClass();
-		$info->img = $noeud->getElementsByTagName("img")->item(0)->getAttribute('src'); //TODO : Nettoyer le lien
-		;
+		// $info->img = $noeud->getElementsByTagName("img")->item(0)->getAttribute('src'); //TODO : Nettoyer le lien
+
+		$imgElements = $noeud->getElementsByTagName('img');
+		foreach ($imgElements as $imgElement) {
+    	if ($imgElement->hasAttribute('class') && $imgElement->getAttribute('class') === 'product-image-photo') {
+        $info->img = $imgElement->getAttribute('src');}}
+
 		$a_titre = $noeud->getElementsByTagName("a")->item(0);
 		$info->url = $a_titre->getAttribute('href');
 
@@ -141,6 +147,7 @@ class SAQ extends Modele
 				}
 
 				$info->desc->texte = trim($info->desc->texte);
+				// $info->type = $info->desc->type = trim($aDesc[0]);
 			}
 		}
 
