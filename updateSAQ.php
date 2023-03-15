@@ -1,32 +1,44 @@
 <!DOCTYPE HTML>
 <html>
-	
-	<head>
-		<meta charset="UTF-8" />	
-	</head>
-	<body>
-<?php
+
+<head>
+	<meta charset="UTF-8" />
+</head>
+
+<body>
+	<?php
 	require("dataconf.php");
 	require("config.php");
-	$page = 1;
 	$nombreProduit = 96; //48 ou 96	
-	
+	$page = 1;
+	$i = 1;
+
 	$saq = new SAQ();
 
-	while(true) {
-		echo "<h2>page ". $page ."</h2>";
-		$nombre = $saq->getProduits($nombreProduit, $page);
-		echo $nombre;
-		if($nombre == 0) {
-			break; // plus de page à crawler, on sort du loop.
-		}
-		echo "importation : ". $nombre. "<br>";
-		$page++;
-	}
+	$nombre = $saq->getMaxPages();
+	echo "nombre de page = ". $nombre; 
+	// $nombre = $nombre + 1;
+	$nombre = intval($nombre);
 	
-	
-	
+	for ($i = 0; $i < ($nombre+1); $i++)	//permet d'importer séquentiellement plusieurs pages.
+	{
 
-?>
+		echo "<h2>page " . ($page + $i) . "</h2>";
+		$resultat = $saq->getProduits($nombreProduit, $page + $i);
+		echo "importation : " . $resultat . "<br>";
+	}
+
+	// while ($nombre = $saq->getProduits($nombreProduit, $page)) {
+	// 	echo "<h2>page " . $page . "</h2>";
+	// 	echo "importation : " . $nombre . "<br>";
+	// 	$page++;
+	// }
+		
+
+
+
+
+	?>
 </body>
+
 </html>

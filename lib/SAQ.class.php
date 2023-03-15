@@ -30,12 +30,58 @@ class SAQ extends Modele
 		}
 	}
 
+	function getMaxPages()
+	{
+
+		$nombre = 96;
+		$maxPages = 1;
+	
+		ini_set('max_execution_time', 0);
+		$s = curl_init();
+		$url = "https://www.saq.com/fr/produits/vin?p=1&product_list_limit=" . $nombre . "&product_list_order=name_asc";
+	
+		curl_setopt_array($s, array(
+			CURLOPT_URL => $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0',
+			CURLOPT_ENCODING => 'gzip, deflate',
+			CURLOPT_HTTPHEADER => array(
+				'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+				'Accept-Language: en-US,en;q=0.5',
+				'Accept-Encoding: gzip, deflate',
+				'Connection: keep-alive',
+				'Upgrade-Insecure-Requests: 1',
+			),
+		));
+	
+		$webpage = curl_exec($s);
+		$status = curl_getinfo($s, CURLINFO_HTTP_CODE);
+		curl_close($s);
+	
+		$doc = new DOMDocument();
+		@$doc->loadHTML($webpage);
+	
+		$elements = $doc->getElementsByTagName("p");
+		foreach ($elements as $key => $noeud) {
+			if ($noeud->getAttribute('class') == "toolbar-amount") {
+				$text = $noeud->textContent;
+				preg_match("/sur\s*(\d+)/", $text, $matches);
+				$total = intval($matches[1]);
+				echo "Total: " . $total;
+				$maxPages = ceil($total / $nombre);
+				break;
+			}
+		}
+	
+		return $maxPages;
+	}
+
 	/**
 	 * getProduits
 	 * @param int $nombre
 	 * @param int $debut
 	 */
-	public function getProduits($nombre = 96, $page = 1)
+	public function getProduits($nombre = 96, $page)
 	{
 		ini_set('max_execution_time', 0);
 		$s = curl_init();
@@ -183,7 +229,6 @@ class SAQ extends Modele
 		var_dump($bte);
 		// Récupère le type
 		$rows = $this->_db->query("select id from vino__type where type = '" . $bte->desc->type . "'");
-
 		if ($rows->num_rows == 1) {
 			$type = $rows->fetch_assoc();
 			//var_dump($type);
